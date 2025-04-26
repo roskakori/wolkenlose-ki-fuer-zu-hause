@@ -1,0 +1,39 @@
+# Docker containers and volumes for local development
+services:
+  ollama:
+    container_name: "gemeinde_ollama"
+    volumes:
+      - ollama_data:/root/.ollama
+    # Uncomment below for GPU support
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities:
+    #             - gpu
+    ports:
+      - "${LT_OLLAMA_PORT:-11444}:11434"
+    tty: true
+    image: ollama/ollama:0.6.6 # Most current version during Linuxtage 2025.
+    env_file:
+      - "./.env"
+
+  postgres:
+    container_name: "gemeinde_postgres"
+    image: "pgvector/pgvector:pg17"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${LT_POSTGRES_PORT:-5444}:5432"
+    environment:
+      POSTGRES_USER: "${LT_POSTGRES_USERNAME:-gemeinde}"
+      POSTGRES_PASSWORD: "${LT_POSTGRES_PASSWORD:-insecure}"
+      POSTGRES_DB: "${LT_POSTGRES_DATABASE:-gemeinde}"
+    env_file:
+      - "./.env"
+
+volumes:
+  ollama_data:
+  postgres_data:

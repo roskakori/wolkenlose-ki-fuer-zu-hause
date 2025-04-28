@@ -2748,7 +2748,7 @@ wheels = [
 [[package]]
 name = "wolkenlose-ki-fuer-zu-hause"
 version = "1.0.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "marker-pdf", extra = ["full"] },
     { name = "notebook" },
